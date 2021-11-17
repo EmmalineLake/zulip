@@ -156,7 +156,7 @@ learn from you.
   - [Try, then ask](https://www.mattringel.com/2013/09/30/you-must-try-and-then-you-must-ask/)
   - [We aren’t just making code, we’re making history](https://www.harihareswara.net/sumana/2016/10/12/0)
   - [How to ask Good Questions](https://jvns.ca/blog/good-questions/)
-- Understand [what makes a great Zulip contributor](..#what-makes-a-great-zulip-contributor)
+- Understand [what makes a great Zulip contributor](../overview/contributing.html#what-makes-a-great-zulip-contributor)
 
 This is a typical question/response sequence:
 
