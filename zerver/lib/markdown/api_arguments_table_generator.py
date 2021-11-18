@@ -48,24 +48,18 @@ class APIArgumentsTablePreprocessor(Preprocessor):
             for line in lines:
                 loc = lines.index(line)
                 match = REGEXP.search(line)
-
                 if not match:
                     continue
-
                 filename = match.group(1)
                 doc_name = match.group(2)
                 filename = os.path.expanduser(filename)
-
                 is_openapi_format = filename.endswith(".yaml")
-
                 if not os.path.isabs(filename):
                     parent_dir = self.base_path
                     filename = os.path.normpath(os.path.join(parent_dir, filename))
-
                 if is_openapi_format:
                     endpoint, method = doc_name.rsplit(":", 1)
                     arguments: List[Dict[str, Any]] = []
-
                     try:
                         arguments = get_openapi_parameters(endpoint, method)
                     except KeyError as e:
@@ -78,7 +72,6 @@ class APIArgumentsTablePreprocessor(Preprocessor):
                     with open(filename) as fp:
                         json_obj = json.load(fp)
                         arguments = json_obj[doc_name]
-
                 if arguments:
                     text = self.render_table(arguments)
                 # We want to show this message only if the parameters
@@ -110,7 +103,8 @@ class APIArgumentsTablePreprocessor(Preprocessor):
     <div class="api-example">
         <span class="api-argument-example-label">Example</span>: <code>{example}</code>
     </div>
-    <div class="api-description">{description}</div>
+    <!-- <div class="api-description">{description}</div> -->
+    <div class="api-description">{description} {object_details} </div>
     <hr>
 </div>"""
 
@@ -121,7 +115,6 @@ class APIArgumentsTablePreprocessor(Preprocessor):
             oneof = ["`" + str(item) + "`" for item in argument.get("schema", {}).get("enum", [])]
             if oneof:
                 description += "\nMust be one of: {}.".format(", ".join(oneof))
-
             default = argument.get("schema", {}).get("default")
             if default is not None:
                 description += f"\nDefaults to `{json.dumps(default)}`."
@@ -130,7 +123,6 @@ class APIArgumentsTablePreprocessor(Preprocessor):
                 data_type = generate_data_type(argument["schema"])
             else:
                 data_type = generate_data_type(argument["content"]["application/json"]["schema"])
-
             # TODO: OpenAPI allows indicating where the argument goes
             # (path, querystring, form data...).  We should document this detail.
             example = ""
@@ -145,23 +137,30 @@ class APIArgumentsTablePreprocessor(Preprocessor):
                 example = json.dumps(argument["example"])
             else:
                 example = json.dumps(argument["content"]["application/json"]["example"])
-
             required_string: str = "required"
             if argument.get("in", "") == "path":
                 # Any path variable is required
                 assert argument["required"]
                 required_string = "required in path"
-
             if argument.get("required", False):
                 required_block = f'<span class="api-argument-required">{required_string}</span>'
             else:
                 required_block = '<span class="api-argument-optional">optional</span>'
-
             check_deprecated_consistency(argument, description)
             if argument.get("deprecated", False):
                 deprecated_block = '<span class="api-argument-deprecated">Deprecated</span>'
             else:
                 deprecated_block = ""
+
+            if "object" in data_type:
+                if "schema" in argument:
+                    object_block = render_object_details(argument["schema"])
+                else:
+                    object_block = render_object_details(
+                        argument["content"]["application/json"]["schema"]
+                    )
+            else:
+                object_block = ""
 
             table.append(
                 argument_template.format(
@@ -171,6 +170,7 @@ class APIArgumentsTablePreprocessor(Preprocessor):
                     deprecated=deprecated_block,
                     description=md_engine.convert(description),
                     type=data_type,
+                    object_details=object_block,
                 )
             )
 
@@ -192,3 +192,14 @@ def generate_data_type(schema: Mapping[str, Any]) -> str:
     else:
         data_type = schema["type"]
     return data_type
+
+
+def render_object_details(schema: Mapping[str, Any]) -> str:
+    ## TODO: figure out how to render the properties into nice html string, maybe using details/summary!
+    object_details = ""
+    if "items" in schema:
+        object_details = render_object_details(schema["items"])
+        object_details = [{k: v} for (k, v) in object_details.iteritems()]
+    else:
+        object_details = schema["properties"]
+    return object_details
