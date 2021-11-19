@@ -1,0 +1,3 @@
+-- Running tests in parallel mode with 4 processes.
+INFO: URL coverage report is in var/url_coverage.txt
+INFO: Try running: ./tools/create-test-api-docs
