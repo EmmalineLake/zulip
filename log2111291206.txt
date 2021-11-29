@@ -1,0 +1,45 @@
+Removing everything under '_build'...
+Running Sphinx v4.2.0
+making output directory... done
+myst v0.15.2: MdParserConfig(renderer='sphinx', commonmark_only=False, enable_extensions=['colon_fence', 'substitution'], dmath_allow_labels=True, dmath_allow_space=True, dmath_allow_digits=True, dmath_double_inline=False, update_mathjax=True, mathjax_classes='tex2jax_process|mathjax_process|math|output_area', disable_syntax=[], url_schemes=['http', 'https', 'mailto', 'ftp'], heading_anchors=None, heading_slug_func=None, html_meta=[], footnote_transition=True, substitutions=['LATEST_RELEASE_VERSION'], sub_delimiters=['{', '}'], words_per_minute=200)
+building [mo]: targets for 0 po files that are out of date
+building [html]: targets for 133 source files that are out of date
+updating environment: [new config] 133 added, 0 changed, 0 removed
+reading sources... [ 12%] code-of-conduct .. development/test-install
+reading sources... [ 25%] development/using .. git/the-git-difference
+reading sources... [ 37%] git/troubleshooting .. production/export-and-import
+reading sources... [ 50%] production/giphy-gif-integration .. production/video-calls
+reading sources... [ 62%] subsystems/analytics .. subsystems/management-commands
+reading sources... [ 75%] subsystems/markdown .. testing/linters
+reading sources... [ 87%] testing/manual-testing .. translating/translating
+reading sources... [100%] tutorials/index .. tutorials/writing-views
+
+waiting for workers...
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... done
+preparing documents... done
+writing output... [ 14%] contributing/accessibility .. documentation/index
+writing output... [ 28%] documentation/integrations .. index
+writing output... [ 42%] overview/architecture-overview .. production/mobile-push-notifications
+writing output... [ 57%] production/multiple-organizations .. subsystems/emoji
+writing output... [ 71%] subsystems/events-system .. subsystems/settings
+writing output... [ 85%] subsystems/slash-commands .. translating/index
+writing output... [100%] translating/internationalization .. tutorials/writing-views
+
+waiting for workers...
+generating indices... genindex done
+writing additional pages... search done
+copying images... [ 20%] images/zulip-dev.png
+copying images... [ 40%] images/codeanywhere-workspace.png
+copying images... [ 60%] images/zulip-open-pr.png
+copying images... [ 80%] images/architecture_simple.png
+copying images... [100%] images/shell-screenshot.png
+
+copying static files... done
+copying extra files... done
+dumping search index in English (code: en)... done
+dumping object inventory... done
+build succeeded.
+
+The HTML pages are in _build/html.
